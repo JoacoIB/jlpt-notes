@@ -1,0 +1,186 @@
+---
+layout: layouts/base.njk
+---
+
+{% set notePages = [] %}
+{% for entry in collections.all %}
+  {% if entry.data.layout == "layouts/notebook-page.njk" %}
+    {% set notePages = (notePages.push({
+      url: entry.url,
+      titulo: entry.data.titulo,
+      slug: entry.fileSlug,
+      jlpt: entry.data.jlpt
+    }), notePages) %}
+  {% endif %}
+{% endfor %}
+{% set titleReading = lectura %}
+
+<article class="study-page">
+  <nav class="notes-nav" aria-label="Navegacion entre apuntes">
+    <a class="brand-link" href="{{ '/' | url }}">Notas de JLPT</a>
+
+    {# <div class="notes-search">
+      <label class="search-label" for="note-search">Buscar apunte</label>
+      <input
+        id="note-search"
+        class="search-input"
+        type="search"
+        placeholder="Buscar por nombre o nivel"
+        autocomplete="off"
+      >
+    </div> #}
+
+    <div class="notes-links" id="notes-links">
+      {# {% for note in notePages %}
+        <a
+          href="{{ note.url | url }}"
+          class="note-link{% if page.url == note.url %} is-current{% endif %}"
+          data-note-title="{{ note.titulo | lower }}"
+          data-note-slug="{{ note.slug | lower }}"
+          data-note-level="{{ note.jlpt | lower }}"
+        >
+          <span>{{ note.titulo }}</span>
+          <small>{{ note.jlpt }}</small>
+        </a>
+      {% endfor %} #}
+    </div>
+  </nav>
+
+  <header class="lesson-hero">
+    <p class="kicker">Gramática</p>
+    <div class="lesson-heading">
+      <div>
+        <h1>{{ titulo }}</h1>
+        {% if titleReading %}
+          <p class="title-reading">{{ titleReading }}</p>
+        {% endif %}
+        <p class="meaning-line">
+          {% for item in significado %}
+            <span>{{ item }}</span>{% if not loop.last %}<span class="divider">•</span>{% endif %}
+          {% endfor %}
+        </p>
+      </div>
+      <p class="jlpt-pill">{{ jlpt }}</p>
+    </div>
+  </header>
+
+  <section class="meta-strip" aria-label="Resumen gramatical">
+    <section class="meta-card">
+      <p class="meta-label">Estructura</p>
+      <ul class="pattern-list">
+        {% for item in estructura %}
+          <li><code>{{ item }}</code></li>
+        {% endfor %}
+      </ul>
+    </section>
+
+    {% if similar %}
+    <section class="meta-card">
+      <p class="meta-label">Relacionado</p>
+      <ul class="tag-list">
+        {% for item in similar %}
+          <li>{{ item }}</li>
+        {% endfor %}
+      </ul>
+    </section>
+    {% endif %}
+  </section>
+
+  <div class="content-card">
+    {% set sections = content.trim().split('## ') %}
+    {% for section in sections %}
+      {% if section.trim() %}
+        {% set parts = section.trim().split('\n\n') %}
+        {% set heading = parts[0].trim() %}
+        <section class="note-section">
+          <h2>{{ heading }}</h2>
+          {% for paragraph in parts %}
+            {% if not loop.first and paragraph.trim() %}
+              {% set formatted = paragraph
+                | replace('**Traducción:**', '<strong>Traducción:</strong>')
+                | replace('\n', '<br>') %}
+              <p>{{ formatted | safe }}</p>
+            {% endif %}
+          {% endfor %}
+        </section>
+      {% endif %}
+    {% endfor %}
+  </div>
+</article>
+
+<script>
+  // Navegacion de notas comentada en este layout.
+  // const input = document.getElementById("note-search");
+  // const links = Array.from(document.querySelectorAll(".note-link"));
+  const furiganaTargets = Array.from(document.querySelectorAll(".note-section p"));
+
+  // if (input && links.length) {
+  //   input.addEventListener("input", () => {
+  //     const query = input.value.trim().toLowerCase();
+
+  //     links.forEach((link) => {
+  //       const text = [
+  //         link.dataset.noteTitle,
+  //         link.dataset.noteSlug,
+  //         link.dataset.noteLevel
+  //       ].join(" ");
+
+  //       link.hidden = query !== "" && !text.includes(query);
+  //     });
+  //   });
+  // }
+
+  const toRuby = (html) => html
+    .replace(/\{([^{}|]+)\|([^{}]+)\}/g, "<ruby>$1<rt>$2</rt></ruby>");
+
+  const getRuleStepPx = () => {
+    const rootValue = getComputedStyle(document.documentElement)
+      .getPropertyValue("--rule-step")
+      .trim();
+    const probe = document.createElement("div");
+    probe.style.position = "absolute";
+    probe.style.visibility = "hidden";
+    probe.style.height = rootValue || "1.9rem";
+    document.body.appendChild(probe);
+    const px = probe.getBoundingClientRect().height;
+    probe.remove();
+    return px > 0 ? px : 30.4;
+  };
+
+  const snapSectionsToNotebookGrid = () => {
+    const ruleStep = getRuleStepPx();
+    const contentCard = document.querySelector(".content-card");
+
+    if (!contentCard) {
+      return;
+    }
+
+    contentCard.style.paddingBottom = "";
+    const height = contentCard.getBoundingClientRect().height;
+    const snappedHeight = Math.ceil(height / ruleStep) * ruleStep;
+    const extra = snappedHeight - height;
+
+    if (extra > 0.5) {
+      contentCard.style.paddingBottom = `${extra}px`;
+    }
+  };
+
+  furiganaTargets.forEach((node) => {
+    node.innerHTML = toRuby(node.innerHTML);
+    if (node.querySelector("ruby")) {
+      node.classList.add("has-ruby");
+    }
+  });
+
+  const scheduleSnap = () => {
+    window.requestAnimationFrame(snapSectionsToNotebookGrid);
+  };
+
+  if (document.fonts && document.fonts.ready) {
+    document.fonts.ready.then(scheduleSnap);
+  } else {
+    scheduleSnap();
+  }
+
+  window.addEventListener("resize", scheduleSnap);
+</script>
