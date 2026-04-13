@@ -7,9 +7,9 @@ significado:
   - parece que...
   - se ve...
 estructura:
-  - A--i--+そうです
-  - Aな+そうです
-  - V--ます--+そうです
+  - adj_no_i | そうです
+  - adj_na | そうです
+  - verb_no_masu | そうです
 similar:
 ---
 {% from "macros/example.njk" import renderExample %}
@@ -22,4 +22,4 @@ Se usa para describir la apariencia de algo o alguien, o la impresión que da al
 
 {{ renderExample("このケーキ、**おいしそうです**ね", "Esa torta parece rica.") }}
 
-{{ renderExample("{井上|いのうえ}さんは{早|はや}く**{走|はし}れそう**です。", "Parece que Inoue puede correr rápido.") }}
+{{ renderExample("{井上|いのうえ}さんは{早|はや}く**{走|はし}れそうです**。", "Parece que Inoue puede correr rápido.") }}

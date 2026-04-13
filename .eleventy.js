@@ -49,6 +49,30 @@ module.exports = function (eleventyConfig) {
       .replace(/~~([^~]+)~~/g, "<del>$1</del>")
       .replace(/--([^\n]+?)--/g, "<del>$1</del>");
   });
+  eleventyConfig.addFilter("patternPart", (value) => {
+    if (typeof value !== "string") {
+      return value;
+    }
+
+    const token = value.trim();
+    const patternMap = {
+      verb_masu: "V-ます",
+      verb_no_masu: "V-~~ます~~",
+      verb_te: "V-て",
+      verb_no_te: "V-~~て~~",
+      verb_ru: "V-る",
+      verb_no_ru: "V-~~る~~",
+      verb_futsuu: "V({普通|ふつう})",
+      adj_i: "Aい",
+      adj_no_i: "A~~い~~",
+      adj_na: "Aな",
+      adj_no_na: "A~~な~~",
+      noun: "N",
+      sentence: "S",
+    };
+
+    return patternMap[token] || token;
+  });
 
   const repository = process.env.GITHUB_REPOSITORY || "";
   const repositoryName = repository.split("/")[1] || "";

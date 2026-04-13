@@ -71,7 +71,18 @@ layout: layouts/base.njk
       <p class="meta-label">Estructura</p>
       <ul class="pattern-list">
         {% for item in estructura %}
-          <li><code>{{ item | inlineFormat | safe }}</code></li>
+          {% set parts = item.split('|') %}
+          <li class="pattern-chain">
+            {% for part in parts %}
+              {% set piece = part.trim() %}
+              {% if piece %}
+                {% if not loop.first %}
+                  <span class="pattern-plus">+</span>
+                {% endif %}
+                <span class="pattern-pill">{{ piece | patternPart | furigana | inlineFormat | safe }}</span>
+              {% endif %}
+            {% endfor %}
+          </li>
         {% endfor %}
       </ul>
     </section>
