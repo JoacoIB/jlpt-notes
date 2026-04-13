@@ -12,17 +12,14 @@ estructura:
   - V(futsuu)+んです
 similar:
 ---
+{% from "macros/example.njk" import renderExample %}
 
 ## Uso
 
 Se usa para explicar o justificar algo, para dar una razón o contexto a lo que se dice. También se puede usar para pedir una explicación o razón de algo.
 
-## Ejemplo 1
+## Ejemplo
 
-どうして{遅|おそ}くなったんですか？
-**Traducción:** ¿Por qué llegaste tarde?
+{{ renderExample("どうして{遅|おそ}く**なったんです**か？", "¿Por qué llegaste tarde?") }}
 
-## Ejemplo 2
-
-{電車|でんしゃ}が{止|と}まっていたんです。
-**Traducción:** Fue porque el tren se detuvo.
+{{ renderExample("{電車|でんしゃ}が{止|と}まって**いたんです**。", "Fue porque el tren se detuvo.") }}

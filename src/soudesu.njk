@@ -7,22 +7,19 @@ significado:
   - parece que...
   - se ve...
 estructura:
-  - A-i-+そうです
+  - A--i--+そうです
   - Aな+そうです
-  - V-ます-+そうです
+  - V--ます--+そうです
 similar:
 ---
+{% from "macros/example.njk" import renderExample %}
 
 ## Uso
 
 Se usa para describir la apariencia de algo o alguien, o la impresión que da al verlo.
 
-## Ejemplo 1
+## Ejemplo
 
-このケーキ、おいしそうですね
-**Traducción:** Esa torta parece rica.
+{{ renderExample("このケーキ、**おいしそうです**ね", "Esa torta parece rica.") }}
 
-## Ejemplo 2
-
-{井上|いのうえ}さんは{早|はや}く{走|はし}れそうです。
-**Traducción:** Parece que Inoue puede correr rápido.
+{{ renderExample("{井上|いのうえ}さんは{早|はや}く**{走|はし}れそう**です。", "Parece que Inoue puede correr rápido.") }}

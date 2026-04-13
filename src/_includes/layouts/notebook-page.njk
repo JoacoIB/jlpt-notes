@@ -50,13 +50,15 @@ layout: layouts/base.njk
     <p class="kicker">Gramática</p>
     <div class="lesson-heading">
       <div>
-        <h1>{{ titulo }}</h1>
-        {% if titleReading %}
-          <p class="title-reading">{{ titleReading }}</p>
-        {% endif %}
+        <div class="title-row">
+          <h1>{{ titulo }}</h1>
+          {% if titleReading %}
+            <p class="title-reading">{{ titleReading }}</p>
+          {% endif %}
+        </div>
         <p class="meaning-line">
           {% for item in significado %}
-            <span>{{ item }}</span>{% if not loop.last %}<span class="divider">•</span>{% endif %}
+            <span>{{ item | inlineFormat | safe }}</span>{% if not loop.last %}<span class="divider">•</span>{% endif %}
           {% endfor %}
         </p>
       </div>
@@ -69,7 +71,7 @@ layout: layouts/base.njk
       <p class="meta-label">Estructura</p>
       <ul class="pattern-list">
         {% for item in estructura %}
-          <li><code>{{ item }}</code></li>
+          <li><code>{{ item | inlineFormat | safe }}</code></li>
         {% endfor %}
       </ul>
     </section>
@@ -92,14 +94,22 @@ layout: layouts/base.njk
       {% if section.trim() %}
         {% set parts = section.trim().split('\n\n') %}
         {% set heading = parts[0].trim() %}
-        <section class="note-section">
+        {% set tone = heading | sectionTone %}
+        <section class="note-section note-section--{{ tone }}">
           <h2>{{ heading }}</h2>
           {% for paragraph in parts %}
             {% if not loop.first and paragraph.trim() %}
-              {% set formatted = paragraph
-                | replace('**Traducción:**', '<strong>Traducción:</strong>')
-                | replace('\n', '<br>') %}
-              <p>{{ formatted | safe }}</p>
+              {% set trimmedParagraph = paragraph.trim() %}
+              {% if '<p class="example-line' in trimmedParagraph %}
+                {{ trimmedParagraph | safe }}
+              {% else %}
+                {% set hasRuby = paragraph | hasFurigana %}
+                {% set formatted = paragraph
+                  | replace('\n', '<br>')
+                  | furigana
+                  | inlineFormat %}
+                <p{% if hasRuby %} class="has-ruby"{% endif %}>{{ formatted | safe }}</p>
+              {% endif %}
             {% endif %}
           {% endfor %}
         </section>
@@ -107,80 +117,3 @@ layout: layouts/base.njk
     {% endfor %}
   </div>
 </article>
-
-<script>
-  // Navegacion de notas comentada en este layout.
-  // const input = document.getElementById("note-search");
-  // const links = Array.from(document.querySelectorAll(".note-link"));
-  const furiganaTargets = Array.from(document.querySelectorAll(".note-section p"));
-
-  // if (input && links.length) {
-  //   input.addEventListener("input", () => {
-  //     const query = input.value.trim().toLowerCase();
-
-  //     links.forEach((link) => {
-  //       const text = [
-  //         link.dataset.noteTitle,
-  //         link.dataset.noteSlug,
-  //         link.dataset.noteLevel
-  //       ].join(" ");
-
-  //       link.hidden = query !== "" && !text.includes(query);
-  //     });
-  //   });
-  // }
-
-  const toRuby = (html) => html
-    .replace(/\{([^{}|]+)\|([^{}]+)\}/g, "<ruby>$1<rt>$2</rt></ruby>");
-
-  const getRuleStepPx = () => {
-    const rootValue = getComputedStyle(document.documentElement)
-      .getPropertyValue("--rule-step")
-      .trim();
-    const probe = document.createElement("div");
-    probe.style.position = "absolute";
-    probe.style.visibility = "hidden";
-    probe.style.height = rootValue || "1.9rem";
-    document.body.appendChild(probe);
-    const px = probe.getBoundingClientRect().height;
-    probe.remove();
-    return px > 0 ? px : 30.4;
-  };
-
-  const snapSectionsToNotebookGrid = () => {
-    const ruleStep = getRuleStepPx();
-    const contentCard = document.querySelector(".content-card");
-
-    if (!contentCard) {
-      return;
-    }
-
-    contentCard.style.paddingBottom = "";
-    const height = contentCard.getBoundingClientRect().height;
-    const snappedHeight = Math.ceil(height / ruleStep) * ruleStep;
-    const extra = snappedHeight - height;
-
-    if (extra > 0.5) {
-      contentCard.style.paddingBottom = `${extra}px`;
-    }
-  };
-
-  furiganaTargets.forEach((node) => {
-    node.innerHTML = toRuby(node.innerHTML);
-    if (node.querySelector("ruby")) {
-      node.classList.add("has-ruby");
-    }
-  });
-
-  const scheduleSnap = () => {
-    window.requestAnimationFrame(snapSectionsToNotebookGrid);
-  };
-
-  if (document.fonts && document.fonts.ready) {
-    document.fonts.ready.then(scheduleSnap);
-  } else {
-    scheduleSnap();
-  }
-
-  window.addEventListener("resize", scheduleSnap);
-</script>

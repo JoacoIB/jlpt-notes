@@ -10,21 +10,20 @@ estructura:
   - S+が出来る
 similar:
 ---
+{% from "macros/example.njk" import renderExample %}
 
-## Uso 1
+## Uso
 
 Se usa para hablar de la habilidad o posibilidad de hacer algo, o de que algo está permitido.
 
-## Ejemplo 1
+## Ejemplo
 
-{井上|いのうえ}さんはピアノが{出来|でき}ます。
-**Traducción:** Inoue puede tocar el piano.
+{{ renderExample("{井上|いのうえ}さんはピアノ**が{出来|でき}ます**。", "Inoue puede tocar el piano.") }}
 
-## Uso 2
+## Uso
 
 Se usa para hablar de la finalización o logro de algo.
 
-## Ejemplo 2
+## Ejemplo
 
-{宿題|しゅくだい}が{出来|でき}ました。
-**Traducción:** He terminado la tarea.
+{{ renderExample("{宿題|しゅくだい}**が{出来|でき}ました**。", "He terminado la tarea.") }}

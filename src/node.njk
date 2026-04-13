@@ -14,17 +14,14 @@ estructura:
 similar:
   - 〜から
 ---
+{% from "macros/example.njk" import renderExample %}
 
 ## Uso
 
 Se usa para indicar la causa de algo.
 
-## Ejemplo 1
+## Ejemplo
 
-{今日|きょう}は{雪|ゆき}が{降|ふ}っているので、{出|で}かけません。
-**Traducción:** No saldré porque está nevando hoy.
+{{ renderExample("{今日|きょう}は{雪|ゆき}が{降|ふ}って**いるので**、{出|で}かけません。", "No saldré porque está nevando hoy.") }}
 
-## Ejemplo 2
-
-{電車|でんしゃ}が{止|と}まっているので、{遅|おそ}くなりました。
-**Traducción:** Llegué tarde porque el tren se detuvo.
+{{ renderExample("{電車|でんしゃ}が{止|と}まって**いるので**、{遅|おそ}くなりました。", "Llegué tarde porque el tren se detuvo.") }}

@@ -1,0 +1,7 @@
+{% macro renderExample(japanese, translation) %}
+  {% set hasRuby = japanese | hasFurigana %}
+  <p class="example-line{% if hasRuby %} has-ruby{% endif %}">
+    <span class="example-japanese">{{ japanese | furigana | inlineFormat | safe }}</span>
+    <span class="example-translation"><strong>Traducción:</strong> {{ translation | inlineFormat | safe }}</span>
+  </p>
+{% endmacro %}

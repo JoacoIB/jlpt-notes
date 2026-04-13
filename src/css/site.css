@@ -11,13 +11,16 @@
   --blue: #5b85aa;
   --coral: #d77b73;
   --gold: #d3a64f;
+  --section-default: #7d6f60;
   --mint: #e0f2ea;
   --sky: #e4eef9;
   --peach: #f7e5db;
   --shadow: 0 20px 44px var(--paper-shadow);
   --rule-step: 1.9rem;
-  --half-step: calc(var(--rule-step) / 2);
-  --ink-offset: 0.3rem;
+  --step-0: 0;
+  --step-1: var(--rule-step);
+  --step-2: calc(var(--rule-step) * 2);
+  --step-3: calc(var(--rule-step) * 3);
   --font-body: "Noto Sans JP", "Avenir Next", "Segoe UI", sans-serif;
   --font-display: "Kiwi Maru", "Hiragino Mincho ProN", serif;
   --font-hand: "Caveat", "Segoe Print", cursive;
@@ -92,9 +95,10 @@ code {
 .notes-nav {
   display: grid;
   grid-template-columns: auto minmax(220px, 320px) 1fr;
-  gap: 1rem;
+  row-gap: var(--step-1);
+  column-gap: 1rem;
   align-items: start;
-  padding: calc(var(--half-step) + var(--ink-offset)) var(--half-step) var(--half-step) calc(var(--rule-step) * 1.5);
+  padding: var(--step-1) var(--step-1) var(--step-1) calc(var(--rule-step) * 1.5);
 }
 
 .brand-link {
@@ -114,7 +118,7 @@ code {
 /* Navegacion de notas comentada en notebook-page.njk
 .notes-search {
   display: grid;
-  gap: calc(var(--half-step) / 3);
+  gap: var(--step-1);
 }
 */
 
@@ -163,7 +167,8 @@ code {
 .notes-links {
   display: flex;
   flex-wrap: wrap;
-  gap: calc(var(--half-step) * 0.7);
+  row-gap: var(--step-1);
+  column-gap: 0.7rem;
 }
 
 .note-link {
@@ -205,43 +210,53 @@ code {
 }
 
 .lesson-hero {
-  padding: calc(var(--rule-step) + var(--ink-offset)) var(--rule-step) var(--rule-step) calc(var(--rule-step) * 1.5);
+  padding: var(--step-1) var(--step-1) var(--step-1) calc(var(--rule-step) * 1.5);
 }
 
 .lesson-heading {
   display: flex;
-  gap: 1rem;
+  row-gap: var(--step-1);
+  column-gap: 1rem;
   justify-content: space-between;
   align-items: start;
 }
 
+.title-row {
+  display: flex;
+  flex-wrap: wrap;
+  align-items: baseline;
+  row-gap: var(--step-1);
+  column-gap: 0.75rem;
+}
+
 .lesson-heading h1 {
   display: inline-block;
-  margin: 0.15rem 0 0;
-  padding-bottom: 0.2rem;
+  margin: var(--step-0);
+  padding-bottom: var(--step-0);
   border-bottom: 3px double var(--blue);
   font-family: var(--font-display);
   font-size: clamp(2.1rem, 4vw, 3.2rem);
-  line-height: 1.08;
+  line-height: var(--step-2);
   letter-spacing: -0.02em;
 }
 
 .title-reading {
-  margin: var(--half-step) 0 0;
+  margin: var(--step-0);
   color: var(--teal);
   font-family: var(--font-hand);
   font-size: 1.5rem;
-  line-height: 1;
+  line-height: var(--step-1);
 }
 
 .meaning-line {
   display: flex;
   flex-wrap: wrap;
-  gap: calc(var(--half-step) * 0.6);
-  margin: var(--half-step) 0 0;
+  row-gap: var(--step-1);
+  column-gap: 0.6rem;
+  margin: var(--step-1) 0 0;
   color: var(--muted);
   font-size: 1.04rem;
-  line-height: var(--rule-step);
+  line-height: var(--step-1);
 }
 
 .divider {
@@ -264,16 +279,17 @@ code {
 .meta-strip {
   display: grid;
   grid-template-columns: repeat(2, minmax(0, 1fr));
-  gap: var(--half-step);
+  row-gap: var(--step-1);
+  column-gap: 1rem;
 }
 
 .meta-card {
-  padding: calc(var(--half-step) + var(--ink-offset)) var(--rule-step) var(--half-step) calc(var(--rule-step) * 1.5);
+  padding: var(--step-1) var(--step-1) var(--step-1) calc(var(--rule-step) * 1.5);
 }
 
 .pattern-list,
 .tag-list {
-  margin: var(--half-step) 0 0;
+  margin: var(--step-1) 0 0;
 }
 
 .pattern-list {
@@ -281,11 +297,11 @@ code {
 }
 
 .pattern-list li + li {
-  margin-top: var(--half-step);
+  margin-top: var(--step-1);
 }
 
 .pattern-list li {
-  line-height: var(--rule-step);
+  line-height: var(--step-1);
 }
 
 .pattern-list code {
@@ -301,7 +317,8 @@ code {
 .tag-list {
   display: flex;
   flex-wrap: wrap;
-  gap: calc(var(--half-step) * 0.6);
+  row-gap: var(--step-1);
+  column-gap: 0.6rem;
   padding: 0;
   list-style: none;
 }
@@ -310,12 +327,12 @@ code {
   padding: 0.35rem 0.7rem;
   border-radius: 999px;
   color: var(--coral);
-  line-height: var(--rule-step);
+  line-height: var(--step-1);
   background: rgba(247, 229, 219, 0.85);
 }
 
 .content-card {
-  padding: calc(var(--rule-step) + var(--ink-offset)) var(--rule-step) var(--rule-step) calc(var(--rule-step) * 1.5);
+  padding: var(--step-1) var(--step-1) var(--step-1) calc(var(--rule-step) * 1.5);
 }
 
 .note-section + .note-section {
@@ -326,49 +343,69 @@ code {
 
 .note-section h2 {
   display: inline-block;
-  margin: 0 0 var(--rule-step);
+  margin: var(--step-0) 0 var(--step-1);
   padding-right: 0.35rem;
   font-family: var(--font-hand);
   font-size: 1.9rem;
-  line-height: var(--rule-step);
+  line-height: var(--step-1);
 }
 
-.note-section:nth-of-type(4n + 1) h2 {
+.note-section--uso h2 {
   color: var(--blue);
 }
 
-.note-section:nth-of-type(4n + 2) h2 {
+.note-section--ejemplo h2 {
   color: var(--teal);
 }
 
-.note-section:nth-of-type(4n + 3) h2 {
+.note-section--atencion h2 {
+  color: var(--gold);
+}
+
+.note-section--errores h2 {
   color: var(--coral);
 }
 
-.note-section:nth-of-type(4n + 4) h2 {
-  color: var(--gold);
+.note-section--default h2 {
+  color: var(--section-default);
 }
 
 .note-section p {
   position: relative;
-  margin: 0 0 var(--rule-step);
+  margin: var(--step-0) 0 var(--step-1);
   max-width: 72ch;
-  line-height: var(--rule-step);
+  line-height: var(--step-1);
 }
 
 .note-section p.has-ruby {
-  min-height: calc(var(--rule-step) * 2);
-  padding-top: var(--rule-step);
-  line-height: var(--rule-step);
-  margin-bottom: 0;
+  min-height: var(--step-2);
+  padding-top: var(--step-1);
+  line-height: var(--step-1);
+  margin-bottom: var(--step-1);
 }
 
 .note-section h2 + p.has-ruby {
   padding-top: 0;
 }
 
+/* .example-line {
+  display: grid;
+  row-gap: var(--step-1);
+} */
+
+.example-japanese,
+.example-translation {
+  display: block;
+  line-height: var(--step-1);
+}
+
 .note-section strong {
   color: var(--teal);
+}
+
+del {
+  color: var(--coral);
+  text-decoration-thickness: 0.12em;
 }
 
 ruby {
@@ -402,7 +439,7 @@ rt {
 
 @media (max-width: 720px) {
   body {
-    padding: 1rem 0.75rem 2rem;
+    padding: var(--step-1) 0.75rem var(--step-2);
   }
 
   main {

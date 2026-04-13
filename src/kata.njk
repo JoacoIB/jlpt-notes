@@ -7,20 +7,17 @@ significado:
   - la forma de...
   - la manera de...
 estructura:
-  - V-ます-+方
+  - V--ます--+方
 similar:
 ---
+{% from "macros/example.njk" import renderExample %}
 
 ## Uso
 
 Se usa para hablar de la forma o manera de hacer algo.
 
-## Ejemplo 1
+## Ejemplo
 
-このケーキの{作|つく}り{方|かた}を{教|おし}えてください。
-**Traducción:** Por favor, enséñame cómo hacer esta torta.
+{{ renderExample("このケーキの**{作|つく}り{方|かた}**を{教|おし}えてください。", "Por favor, enséñame cómo hacer esta torta.") }}
 
-## Ejemplo 2
-
-この{漢字|かんじ}の{読|よ}み{方|かた}がわかりますか？
-**Traducción:** ¿Sabes cómo se lee este kanji?
+{{ renderExample("この{漢字|かんじ}の**{読|よ}み{方|かた}**がわかりますか？", "¿Sabes cómo se lee este kanji?") }}
