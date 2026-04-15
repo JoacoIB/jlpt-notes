@@ -100,6 +100,7 @@ module.exports = function (eleventyConfig) {
   const pathPrefix = repositoryName && !isUserSite ? `/${repositoryName}/` : "/";
 
   return {
+    cleanOutputDir: true,
     pathPrefix,
     dir: {
       input: "src",

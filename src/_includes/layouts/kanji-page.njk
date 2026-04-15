@@ -1,0 +1,56 @@
+---
+layout: layouts/notebook-page.njk
+kicker: Kanji
+noteType: kanji
+---
+
+<section class="meta-strip" aria-label="Lecturas del kanji">
+  {% if kun_yomi %}
+    <section class="meta-card">
+      <p class="meta-label">Kun yomi</p>
+      <ul class="tag-list">
+        {% for item in kun_yomi %}
+          <li>{{ item | furigana | inlineFormat | safe }}</li>
+        {% endfor %}
+      </ul>
+    </section>
+  {% endif %}
+
+  {% if on_yomi %}
+    <section class="meta-card">
+      <p class="meta-label">On yomi</p>
+      <ul class="tag-list">
+        {% for item in on_yomi %}
+          <li>{{ item | furigana | inlineFormat | safe }}</li>
+        {% endfor %}
+      </ul>
+    </section>
+  {% endif %}
+</section>
+
+<div class="content-card">
+  <section class="note-section note-section--default">
+    <h2>Vocabulario</h2>
+
+    {% if vocabulario and vocabulario.length %}
+      <ul class="vocab-list">
+        {% for item in vocabulario %}
+          {% for term, details in item %}
+            <li class="vocab-item">
+              <span class="vocab-word">{{ term | furigana | inlineFormat | safe }}</span>
+              {% if details.lectura %}
+                <span class="vocab-reading">({{ details.lectura | furigana | inlineFormat | safe }})</span>
+              {% endif %}
+              {% if details.significado %}
+                <span class="vocab-sep">:</span>
+                <span class="vocab-meaning">{{ details.significado | inlineFormat | safe }}</span>
+              {% endif %}
+            </li>
+          {% endfor %}
+        {% endfor %}
+      </ul>
+    {% else %}
+      <p>No hay vocabulario cargado todavía.</p>
+    {% endif %}
+  </section>
+</div>

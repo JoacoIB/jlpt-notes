@@ -2,130 +2,39 @@
 layout: layouts/base.njk
 ---
 
-{% set notePages = [] %}
-{% for entry in collections.all %}
-  {% if entry.data.layout == "layouts/notebook-page.njk" %}
-    {% set notePages = (notePages.push({
-      url: entry.url,
-      titulo: entry.data.titulo,
-      slug: entry.fileSlug,
-      jlpt: entry.data.jlpt
-    }), notePages) %}
-  {% endif %}
-{% endfor %}
-{% set titleReading = lectura %}
+{% set pageTitle = titulo or kanji %}
+{% set titleReading = reading or lectura %}
 
 <article class="study-page">
   <nav class="notes-nav" aria-label="Navegacion entre apuntes">
     <a class="brand-link" href="{{ '/' | url }}">Notas de JLPT</a>
 
-    {# <div class="notes-search">
-      <label class="search-label" for="note-search">Buscar apunte</label>
-      <input
-        id="note-search"
-        class="search-input"
-        type="search"
-        placeholder="Buscar por nombre o nivel"
-        autocomplete="off"
-      >
-    </div> #}
-
-    <div class="notes-links" id="notes-links">
-      {# {% for note in notePages %}
-        <a
-          href="{{ note.url | url }}"
-          class="note-link{% if page.url == note.url %} is-current{% endif %}"
-          data-note-title="{{ note.titulo | lower }}"
-          data-note-slug="{{ note.slug | lower }}"
-          data-note-level="{{ note.jlpt | lower }}"
-        >
-          <span>{{ note.titulo }}</span>
-          <small>{{ note.jlpt }}</small>
-        </a>
-      {% endfor %} #}
-    </div>
+    <div class="notes-links" id="notes-links"></div>
   </nav>
 
   <header class="lesson-hero">
-    <p class="kicker">Gramática</p>
+    <p class="kicker">{{ kicker or "Apunte" }}</p>
     <div class="lesson-heading">
       <div>
         <div class="title-row">
-          <h1>{{ titulo }}</h1>
+          <h1>{{ pageTitle }}</h1>
           {% if titleReading %}
             <p class="title-reading">{{ titleReading }}</p>
           {% endif %}
         </div>
-        <p class="meaning-line">
-          {% for item in significado %}
-            <span>{{ item | inlineFormat | safe }}</span>{% if not loop.last %}<span class="divider">•</span>{% endif %}
-          {% endfor %}
-        </p>
+        {% if significado %}
+          <p class="meaning-line">
+            {% for item in significado %}
+              <span>{{ item | inlineFormat | safe }}</span>{% if not loop.last %}<span class="divider">•</span>{% endif %}
+            {% endfor %}
+          </p>
+        {% endif %}
       </div>
-      <p class="jlpt-pill">{{ jlpt }}</p>
+      {% if jlpt %}
+        <p class="jlpt-pill">{{ jlpt }}</p>
+      {% endif %}
     </div>
   </header>
 
-  <section class="meta-strip" aria-label="Resumen gramatical">
-    <section class="meta-card">
-      <p class="meta-label">Estructura</p>
-      <ul class="pattern-list">
-        {% for item in estructura %}
-          {% set parts = item.split('|') %}
-          <li class="pattern-chain">
-            {% for part in parts %}
-              {% set piece = part.trim() %}
-              {% if piece %}
-                {% if not loop.first %}
-                  <span class="pattern-plus">+</span>
-                {% endif %}
-                {% set tone = piece | patternTone %}
-                <span class="pattern-pill pattern-pill--{{ tone }}">{{ piece | patternPart | furigana | inlineFormat | safe }}</span>
-              {% endif %}
-            {% endfor %}
-          </li>
-        {% endfor %}
-      </ul>
-    </section>
-
-    {% if similar %}
-    <section class="meta-card">
-      <p class="meta-label">Relacionado</p>
-      <ul class="tag-list">
-        {% for item in similar %}
-          <li>{{ item }}</li>
-        {% endfor %}
-      </ul>
-    </section>
-    {% endif %}
-  </section>
-
-  <div class="content-card">
-    {% set sections = content.trim().split('## ') %}
-    {% for section in sections %}
-      {% if section.trim() %}
-        {% set parts = section.trim().split('\n\n') %}
-        {% set heading = parts[0].trim() %}
-        {% set tone = heading | sectionTone %}
-        <section class="note-section note-section--{{ tone }}">
-          <h2>{{ heading }}</h2>
-          {% for paragraph in parts %}
-            {% if not loop.first and paragraph.trim() %}
-              {% set trimmedParagraph = paragraph.trim() %}
-              {% if '<p class="example-line' in trimmedParagraph %}
-                {{ trimmedParagraph | safe }}
-              {% else %}
-                {% set hasRuby = paragraph | hasFurigana %}
-                {% set formatted = paragraph
-                  | replace('\n', '<br>')
-                  | furigana
-                  | inlineFormat %}
-                <p{% if hasRuby %} class="has-ruby"{% endif %}>{{ formatted | safe }}</p>
-              {% endif %}
-            {% endif %}
-          {% endfor %}
-        </section>
-      {% endif %}
-    {% endfor %}
-  </div>
+  {{ content | safe }}
 </article>

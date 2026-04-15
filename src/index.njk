@@ -5,12 +5,12 @@ title: Notas de JLPT
 
 <section class="study-page">
   <header class="lesson-hero">
-    <p class="kicker">Gramática</p>
+    <p class="kicker">Gramática y Kanji</p>
     <div class="lesson-heading">
       <div>
         <h1>Notas de JLPT</h1>
         <p class="meaning-line">
-          <span>Apuntes de gramática</span>
+          <span>Apuntes de gramática y kanji</span>
           <span class="divider">•</span>
           <span>Navegación simple entre estructuras</span>
         </p>
@@ -20,12 +20,26 @@ title: Notas de JLPT
 
   <section class="content-card">
     <section class="note-section">
-      <h2>Apuntes</h2>
+      <h2>Gramática</h2>
       <div class="notes-links">
         {% for entry in collections.all %}
-          {% if entry.data.layout == "layouts/notebook-page.njk" %}
+          {% if entry.data.layout == "layouts/grammar-page.njk" %}
             <a href="{{ entry.url | url }}" class="note-link">
-              <span>{{ entry.data.titulo }}</span>
+              <span>{{ entry.data.titulo or entry.data.kanji }}</span>
+              <small>{{ entry.data.jlpt }}</small>
+            </a>
+          {% endif %}
+        {% endfor %}
+      </div>
+    </section>
+
+    <section class="note-section">
+      <h2>Kanji</h2>
+      <div class="notes-links">
+        {% for entry in collections.all %}
+          {% if entry.data.layout == "layouts/kanji-page.njk" %}
+            <a href="{{ entry.url | url }}" class="note-link">
+              <span>{{ entry.data.titulo or entry.data.kanji }}</span>
               <small>{{ entry.data.jlpt }}</small>
             </a>
           {% endif %}

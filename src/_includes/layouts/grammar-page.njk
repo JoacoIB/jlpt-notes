@@ -1,0 +1,68 @@
+---
+layout: layouts/notebook-page.njk
+kicker: Gramática
+noteType: grammar
+---
+
+<section class="meta-strip" aria-label="Resumen gramatical">
+  <section class="meta-card">
+    <p class="meta-label">Estructura</p>
+    <ul class="pattern-list">
+      {% for item in estructura %}
+        {% set parts = item.split('|') %}
+        <li class="pattern-chain">
+          {% for part in parts %}
+            {% set piece = part.trim() %}
+            {% if piece %}
+              {% if not loop.first %}
+                <span class="pattern-plus">+</span>
+              {% endif %}
+              {% set tone = piece | patternTone %}
+              <span class="pattern-pill pattern-pill--{{ tone }}">{{ piece | patternPart | furigana | inlineFormat | safe }}</span>
+            {% endif %}
+          {% endfor %}
+        </li>
+      {% endfor %}
+    </ul>
+  </section>
+
+  {% if similar %}
+    <section class="meta-card">
+      <p class="meta-label">Relacionado</p>
+      <ul class="tag-list">
+        {% for item in similar %}
+          <li>{{ item }}</li>
+        {% endfor %}
+      </ul>
+    </section>
+  {% endif %}
+</section>
+
+<div class="content-card">
+  {% set sections = content.trim().split('## ') %}
+  {% for section in sections %}
+    {% if section.trim() %}
+      {% set parts = section.trim().split('\n\n') %}
+      {% set heading = parts[0].trim() %}
+      {% set tone = heading | sectionTone %}
+      <section class="note-section note-section--{{ tone }}">
+        <h2>{{ heading }}</h2>
+        {% for paragraph in parts %}
+          {% if not loop.first and paragraph.trim() %}
+            {% set trimmedParagraph = paragraph.trim() %}
+            {% if '<p class="example-line' in trimmedParagraph %}
+              {{ trimmedParagraph | safe }}
+            {% else %}
+              {% set hasRuby = paragraph | hasFurigana %}
+              {% set formatted = paragraph
+                | replace('\n', '<br>')
+                | furigana
+                | inlineFormat %}
+              <p{% if hasRuby %} class="has-ruby"{% endif %}>{{ formatted | safe }}</p>
+            {% endif %}
+          {% endif %}
+        {% endfor %}
+      </section>
+    {% endif %}
+  {% endfor %}
+</div>
