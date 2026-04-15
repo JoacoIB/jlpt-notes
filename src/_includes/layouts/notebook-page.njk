@@ -79,7 +79,8 @@ layout: layouts/base.njk
                 {% if not loop.first %}
                   <span class="pattern-plus">+</span>
                 {% endif %}
-                <span class="pattern-pill">{{ piece | patternPart | furigana | inlineFormat | safe }}</span>
+                {% set tone = piece | patternTone %}
+                <span class="pattern-pill pattern-pill--{{ tone }}">{{ piece | patternPart | furigana | inlineFormat | safe }}</span>
               {% endif %}
             {% endfor %}
           </li>

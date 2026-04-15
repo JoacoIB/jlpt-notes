@@ -67,11 +67,31 @@ module.exports = function (eleventyConfig) {
       adj_no_i: "A~~い~~",
       adj_na: "Aな",
       adj_no_na: "A~~な~~",
-      noun: "N",
-      sentence: "S",
+      noun: "S",
     };
 
     return patternMap[token] || token;
+  });
+  eleventyConfig.addFilter("patternTone", (value) => {
+    if (typeof value !== "string") {
+      return "other";
+    }
+
+    const token = value.trim();
+
+    if (token.startsWith("verb_")) {
+      return "verb";
+    }
+
+    if (token.startsWith("adj_")) {
+      return "adj";
+    }
+
+    if (token === "noun" || token === "sustantivo") {
+      return "noun";
+    }
+
+    return "other";
   });
 
   const repository = process.env.GITHUB_REPOSITORY || "";

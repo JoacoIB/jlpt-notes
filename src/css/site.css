@@ -319,16 +319,34 @@ code {
   padding: 0.2rem 0.6rem;
   border: 1px solid rgba(91, 133, 170, 0.28);
   border-radius: 999px;
-  color: #1f303f;
+  color: var(--ink);
   font-size: 1rem;
   font-weight: 700;
   line-height: 1.1;
   white-space: nowrap;
+  background: rgba(255, 255, 255, 0.92);
+}
+
+.pattern-pill--verb {
+  border-color: rgba(91, 133, 170, 0.38);
+  color: var(--blue);
   background: rgba(228, 238, 249, 0.92);
 }
 
+.pattern-pill--adj {
+  border-color: rgba(78, 154, 147, 0.4);
+  color: var(--teal);
+  background: rgba(224, 242, 234, 0.94);
+}
+
+.pattern-pill--noun {
+  border-color: rgba(211, 166, 79, 0.42);
+  color: #7c5a1d;
+  background: rgba(251, 247, 234, 0.96);
+}
+
 .pattern-plus {
-  color: var(--blue);
+  color: var(--ink);
   font-weight: 700;
   line-height: 1;
 }
